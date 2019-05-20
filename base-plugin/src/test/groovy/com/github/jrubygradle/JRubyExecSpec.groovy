@@ -215,4 +215,18 @@ class JRubyExecSpec extends Specification {
         then:
         execTask.configuration == customConfig.name
     }
+
+    @Issue('https://github.com/jruby-gradle/jruby-gradle-plugin/issues/358')
+    void 'setting the "watch" parameters'() {
+        given: 'a file'
+        final String fileName = 'foo.rb'
+
+        when:
+        project.configure(execTask) {
+            watch fileName
+        }
+
+        then:
+        execTask.inputs.files.find { it.name == fileName }
+    }
 }

@@ -84,6 +84,9 @@ Common methods for `JRubyExec` for executing a script
 * `scriptArgs` - `List`.  List of arguments to pass to script.
 * `workingDir` - `Object` (Usually File or String).  Working directory for script.
 * `environment` - `Map`.  Environment to be set. Do not set `GEM_HOME` or `GEM_PATH` with this method.
+* `watch` - `String` or `List`.  List of filenames or a single directory to
+  watch for file changes which should re-run the task when run in Gradle's
+  continuous mode (`-t`)
 * `standardInput` - `InputStream`.  Set an input stream to be read by the script.
 * `standardOutput` - `OutputStream`.  Capture the output of the script.
 * `errorOutput` - `OutputStream`.  Capture the error output of the script.

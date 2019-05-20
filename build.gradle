@@ -61,7 +61,9 @@ subprojects {
         test {
             testLogging {
                 showStandardStreams = true
+                showExceptions = true
                 exceptionFormat "full"
+                events "FAILED", "SKIPPED"
             }
         }
 

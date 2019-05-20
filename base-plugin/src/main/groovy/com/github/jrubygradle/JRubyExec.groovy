@@ -181,8 +181,28 @@ class JRubyExec extends JavaExec implements JRubyExecTraits {
         throw notAllowed(USE_JVM_ARGS)
     }
 
+    /**
+     * Configure files or directories to watch
+     *
+     * Really this is simply syntax sugar on top of the existing TaskInputs
+     * subsystem in Gradle
+     */
+    void setWatch(Object... args) {
+        this.inputs.files files
+    }
+
+    void setWatch(String path) {
+        File f = new File(path)
+
+        if (f.isDirectory()) {
+            this.inputs.dir path
+        } else {
+            this.inputs.file path
+        }
+    }
+
     /** Verify that we are in a good configuration for execution */
-    void validateTaskConfiguration() {
+    protected void validateTaskConfiguration() {
         if ((jrubyVersion != project.jruby.execVersion) &&
             (configuration == JRubyExecUtils.DEFAULT_JRUBYEXEC_CONFIG)) {
             String message = """\

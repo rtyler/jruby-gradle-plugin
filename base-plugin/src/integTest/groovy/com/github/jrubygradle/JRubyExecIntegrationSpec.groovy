@@ -43,7 +43,7 @@ class JRubyExecIntegrationSpec extends IntegrationSpecification {
                     assert jruby.execVersion != '${altVersion}'
                 }
             }
-            
+
             task printConfiguration {
                 doLast {
                     configurations.${configName}.files.each {
@@ -75,7 +75,7 @@ class JRubyExecIntegrationSpec extends IntegrationSpecification {
         withDependencies "${altConfiguration} ${withCreditCardValidator()}"
         withJRubyExecConfig """
             jrubyVersion  '${altVersion}'
-            configuration '${altConfiguration}'            
+            configuration '${altConfiguration}'
         """
 
         when:
@@ -173,6 +173,22 @@ class JRubyExecIntegrationSpec extends IntegrationSpecification {
         new File(projectDir, customGemDir).exists()
     }
 
+    @Issue('https://github.com/jruby-gradle/jruby-gradle-plugin/issues/358')
+    void 'Configuring a watcher'() {
+        setup:
+        useScript(REQUIRES_GEM)
+        withDependencies "${DEFAULT_JRUBYEXEC_CONFIG} ${withCreditCardValidator()}"
+        withJRubyExecConfig '''
+            watch 'foo.rb'
+        '''
+
+        when:
+        BuildResult result = build()
+
+        then:
+        println result.output
+    }
+
     @Override
     void useScript(final String name, final String relativePath = null) {
         super.useScript(name, relativePath)
@@ -195,7 +211,7 @@ class JRubyExecIntegrationSpec extends IntegrationSpecification {
     private void withJRubyExecConfig(String jrubyExecConfig) {
         this.jrubyExecConfig = """
         task ${DEFAULT_TASK_NAME}( type: JRubyExec ) {
-            ${jrubyExecConfig}    
+            ${jrubyExecConfig}
         }
         """
     }
@@ -243,9 +259,9 @@ class JRubyExecIntegrationSpec extends IntegrationSpecification {
         ${preamble ?: ''}
 
         ${dependenciesConfig ?: ''}
-        
-        ${jrubyExec ?: ''}    
-        
+
+        ${jrubyExec ?: ''}
+
         ${additionalContent ?: ''}
         """
     }
